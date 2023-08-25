@@ -45,7 +45,20 @@ export default{
             }else
             {
                 console.log("try get");
-                this.$http.get('/api/').then(res=>{console.log(res)})
+                
+                this.$http({
+                    method:'POST',
+                    url:'/api/index.php',
+                    data:{
+                        username:this.acc_name,
+                        password:this.acc_password,
+
+                    }
+                }).then(response=>{
+                    console.log(response.data);
+                },error=>{
+                    console.log("error");
+                });
                 
             }
 
