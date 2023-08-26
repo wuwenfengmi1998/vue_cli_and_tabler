@@ -1,5 +1,6 @@
 <script>
 import v_footer from './components/footer.vue'
+import router from './router';
 export default{
     components:{
         v_footer,
@@ -8,10 +9,58 @@ export default{
         return{
             username:'',
             password:'',
+
+            acc_name_placeholder:'',
+            acc_pass_placeholder:'',
         }
     },
     methods:{
+        sign(){
+            //console.log("a");
+            var returnflag=0;
+            if(this.username=='')
+            {
+                this.acc_name_placeholder='Please enter user name';
+                returnflag=1;
+            }else{
+                this.acc_name_placeholder='';
+            }
+            if(this.password=='')
+            {
+                this.acc_pass_placeholder='Please enter password';
+                returnflag=1;
+            }else{
+                this.acc_pass_placeholder='';
+            }
+            if(returnflag)
+            {
+                console.log("error");
+            }else{
+                const params = new URLSearchParams();
+                params.append('username', this.username);
+                params.append('password', this.password);
+                this.$http({
+                    method:'POST',
+                    url:'/api/sign.php',
+                    data:params,
+                }).then(response=>{
+                    var error_data=response.data;
+                    //console.log(error_data);
+                    switch(error_data['error_code']){
+                        case 0:
+                            this.$router.push('/home');
+                            break;
+                        case 3:
+                            //this.acc_name='';
+                            
+                            break;
+                    }
 
+                },error=>{
+                    console.log("error");
+                });
+            }
+        }
     }
 }
 </script>
@@ -66,10 +115,15 @@ export default{
               <h2 class="h3 text-center mb-3">
                 Login to your account
               </h2>
-              <form action="./" method="get" autocomplete="off" novalidate>
+              <form @submit.prevent="sign">
                 <div class="mb-3">
                   <label class="form-label">Address Name</label>
-                  <input type="text" class="form-control" placeholder="Name" autocomplete="off">
+                  <div class="input-group input-group-flat">
+                    <input type="text" class="form-control" placeholder="Name" autocomplete="off" v-model.trim="username">
+                    <span class="input-group-text">
+                        <span class="badge bg-red" v-show="acc_name_placeholder">{{this.acc_name_placeholder}}</span>
+                    </span>
+                  </div>  
                 </div>
                 <div class="mb-2">
                   <label class="form-label">
@@ -79,8 +133,10 @@ export default{
                     </span>
                   </label>
                   <div class="input-group input-group-flat">
-                    <input type="password" class="form-control"  placeholder="PassWord"  autocomplete="off">
-    
+                    <input type="password" class="form-control"  placeholder="Password"  autocomplete="off" v-model.trim="password"> 
+                    <span class="input-group-text">
+                        <span class="badge bg-red" v-show="acc_pass_placeholder">{{this.acc_pass_placeholder}}</span>
+                    </span>
                   </div>
                 </div>
                 <div class="mb-2">
