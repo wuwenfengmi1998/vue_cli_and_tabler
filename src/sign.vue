@@ -1,3 +1,21 @@
+<script>
+import v_footer from './components/footer.vue'
+export default{
+    components:{
+        v_footer,
+    },
+    data(){
+        return{
+            username:'',
+            password:'',
+        }
+    },
+    methods:{
+
+    }
+}
+</script>
+
 <template>
 
     <html>
@@ -78,12 +96,15 @@
               <div class="text-center text-secondary mt-3">
                 Don't have account yet? <router-link to="/login">Login</router-link>
               </div>
+              <v_footer></v_footer>
             </div>
           </div>
           <div class="col-12 col-lg-6 col-xl-8 d-none d-lg-block">
             <!-- Photo -->
             <div class="bg-cover h-100 min-vh-100" style="background-image: url(./src/assets/static/photos/finances-us-dollars-and-bitcoins-currency-money-2.jpg)"></div>
           </div>
+
+          
         </div>
     
       </body>
