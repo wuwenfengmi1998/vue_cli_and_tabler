@@ -7,29 +7,44 @@ export default{
             acc_password:'',
             acc_confirm_passwoed:'',
 
-            acc_name_placeholder:'Name',
-            acc_pass_placeholder:'Password',
-            acc_c_pass_placeholder:'Confirm',
+            acc_name_placeholder:'',
+            acc_pass_placeholder:'',
+            acc_c_pass_placeholder:'',
+
+            msg_dis_flsg:false,
         }
     },
     methods:{
+
+        msg_dis_c()
+        {
+            this.msg_dis_flsg=false;
+        },
+
         submit_c()
         {
+
             var returnflag=0;
             if(this.acc_name=='')
             {
                 this.acc_name_placeholder='Please enter user name';
                 returnflag=1;
+            }else{
+                this.acc_name_placeholder='';
             }
             if(this.acc_password=='')
             {
                 this.acc_pass_placeholder='Please enter password';
                 returnflag=1;
+            }else{
+                this.acc_pass_placeholder='';
             }
             if(this.acc_confirm_passwoed=='')
             {
                 this.acc_c_pass_placeholder='Please enter confirm pass';
                 returnflag=1;
+            }else{
+                this.acc_c_pass_placeholder='';
             }
 
             if(this.acc_password!=this.acc_confirm_passwoed)
@@ -44,18 +59,27 @@ export default{
                 console.log("error");
             }else
             {
-                console.log("try get");
-                
+                //console.log("try get");
+                const params = new URLSearchParams();
+                params.append('username', this.acc_name);
+                params.append('password', this.acc_password);
                 this.$http({
                     method:'POST',
-                    url:'/api/index.php',
-                    data:{
-                        username:this.acc_name,
-                        password:this.acc_password,
-
-                    }
+                    url:'/api/login.php',
+                    data:params,
                 }).then(response=>{
-                    console.log(response.data);
+                    var error_data=response.data;
+                    //console.log(error_data);
+                    switch(error_data['error_code']){
+                        case 0:
+                            this.msg_dis_flsg=true;
+                            break;
+                        case 1:
+                            //this.acc_name='';
+                            this.acc_name_placeholder='Duplicate user name';
+                            break;
+                    }
+
                 },error=>{
                     console.log("error");
                 });
@@ -125,17 +149,28 @@ export default{
               <form @submit.prevent="submit_c">
                 <div class="mb-3">
                   <label class="form-label">Address Name</label>
-                  <input type="text" class="form-control" :placeholder="acc_name_placeholder" autocomplete="off" v-model.trim="acc_name">
+                   <div class="input-group input-group-flat">
+                    <input type="text" class="form-control" placeholder="Name" autocomplete="off" v-model.trim="acc_name">
+                    <span class="input-group-text">
+                        <span class="badge bg-red" v-show="acc_name_placeholder">{{this.acc_name_placeholder}}</span>
+                    </span>
+                  </div>                 
                 </div>
                 <div class="mb-2">
                   <label class="form-label">
                     Password
                   </label>
                   <div class="input-group input-group-flat">
-                    <input type="password" class="form-control"  :placeholder="acc_pass_placeholder"  autocomplete="off" v-model.trim="acc_password"> 
+                    <input type="password" class="form-control"  placeholder="Password"  autocomplete="off" v-model.trim="acc_password"> 
+                    <span class="input-group-text">
+                        <span class="badge bg-red" v-show="acc_pass_placeholder">{{this.acc_pass_placeholder}}</span>
+                    </span>
                   </div>
                   <div class="input-group input-group-flat">
-                    <input type="password" class="form-control mt-2"  :placeholder="acc_c_pass_placeholder"  autocomplete="off" v-model.trim="acc_confirm_passwoed">
+                    <input type="password" class="form-control mt-2"  placeholder="Password Confirm"  autocomplete="off" v-model.trim="acc_confirm_passwoed">
+                    <span class="input-group-text mt-2">
+                        <span class="badge bg-red" v-show="acc_c_pass_placeholder">{{this.acc_c_pass_placeholder}}</span>
+                    </span>
                   </div>
                   
                 </div>
@@ -147,6 +182,7 @@ export default{
                 <div class="text-center text-secondary mt-3">
                     have account yet? <router-link to="/sign">Sign</router-link>
                 </div>
+
             </div>
           </div>
 
@@ -186,7 +222,21 @@ export default{
           </div>
         </footer>
         </div>
-    
+
+        <div v-show="msg_dis_flsg" class="modal modal-blur fade show" tabindex="-1" style="display: block; background: black; opacity: 0.7;" aria-modal="true" role="dialog">
+            <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                <div class="modal-content">
+                <div class="modal-body">
+                    <div class="modal-title">Registration success</div>
+                    <div>Are you logged in?</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link link-secondary me-auto" @click="msg_dis_c()">Cancel</button>
+                    <router-link to="/sign" class="btn btn-primary">Yes!</router-link>
+                </div>
+                </div>
+            </div>
+        </div>
       </body>
     </html>
     
