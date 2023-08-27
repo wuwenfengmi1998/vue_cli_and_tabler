@@ -1,8 +1,8 @@
 <script>
-import v_footer from './components/footer.vue'
+
 export default{
     components:{
-        v_footer,
+      
     },
     data(){
         return{
@@ -18,7 +18,7 @@ export default{
         }
     },
     methods:{
-
+        
         msg_dis_c()
         {
             this.msg_dis_flsg=false;
@@ -27,6 +27,7 @@ export default{
         submit_c()
         {
 
+            
             var returnflag=0;
             if(this.acc_name=='')
             {
@@ -133,7 +134,7 @@ export default{
         <div class="row g-0 flex-fill">
             <div class="col-12 col-lg-6 col-xl-8 d-none d-lg-block">
             <!-- Photo -->
-            <div class="bg-cover h-100 min-vh-100" style="background-image: url(./assets/static/photos/finances-us-dollars-and-bitcoins-currency-money-2.jpg)"></div>
+            <div class="bg-cover h-100 min-vh-100" style="background-image: url(https://lmve.net/uploadfile/photo/0/0/81.png)"></div>
           </div>
           <div class="col-12 col-lg-6 col-xl-4 border-top-wide border-primary d-flex flex-column justify-content-center">
             <div class="container container-tight my-5 px-lg-5">

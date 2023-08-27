@@ -1,9 +1,9 @@
 <script>
-import v_footer from './components/footer.vue'
-import router from './router';
+
+
 export default{
     components:{
-        v_footer,
+        
     },
     data(){
         return{
@@ -17,6 +17,9 @@ export default{
     methods:{
         sign(){
             //console.log("a");
+
+            //localStorage.setItem('token','testxx');
+
             var returnflag=0;
             if(this.username=='')
             {
@@ -52,7 +55,10 @@ export default{
                             break;
                         case 3:
                             //this.acc_name='';
-                            
+                            this.acc_name_placeholder='not this user';
+                            break;
+                        case 4:
+                            this.acc_pass_placeholder='pass erro';
                             break;
                     }
 
@@ -157,7 +163,7 @@ export default{
           </div>
           <div class="col-12 col-lg-6 col-xl-8 d-none d-lg-block">
             <!-- Photo -->
-            <div class="bg-cover h-100 min-vh-100" style="background-image: url(/static/photos/finances-us-dollars-and-bitcoins-currency-money-2.jpg)"></div>
+            <div class="bg-cover h-100 min-vh-100" style="background-image: url(https://lmve.net/uploadfile/photo/0/0/82.png)"></div>
           </div>
 
           

@@ -43,11 +43,10 @@ export default{
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon text-pink" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" /></svg>
                     Sponsor
                     </a>
+                </div>
 
-                    <router-link to="/login" class="btn" rel="noreferrer">Login</router-link>
-                    <router-link to="/sign" class="btn" rel="noreferrer">Sign</router-link>
                 </div>
-                </div>
+                
                 <div class="d-none d-md-flex">
 
 
@@ -137,22 +136,30 @@ export default{
                 </div>
                 </div>
                 <div class="nav-item dropdown">
-                <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-                    <span class="avatar avatar-sm" style="background-image: url(./static/avatars/000m.jpg)"></span>
-                    <div class="d-none d-xl-block ps-2">
-                    <div>Paweł Kuna</div>
-                    <div class="mt-1 small text-secondary">UI Designer</div>
+                    <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+                        <span class="avatar avatar-sm" style="background-image: url(./static/avatars/000m.jpg)"></span>
+                        <div class="d-none d-xl-block ps-2">
+                        <div>Paweł Kuna</div>
+                        <div class="mt-1 small text-secondary">UI Designer</div>
+                        </div>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                        <a href="#" class="dropdown-item">Status</a>
+                        <a href="./profile.html" class="dropdown-item">Profile</a>
+                        <a href="#" class="dropdown-item">Feedback</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="./settings.html" class="dropdown-item">Settings</a>
+                        <a href="./sign-in.html" class="dropdown-item">Logout</a>
                     </div>
-                </a>
-                <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <a href="#" class="dropdown-item">Status</a>
-                    <a href="./profile.html" class="dropdown-item">Profile</a>
-                    <a href="#" class="dropdown-item">Feedback</a>
-                    <div class="dropdown-divider"></div>
-                    <a href="./settings.html" class="dropdown-item">Settings</a>
-                    <a href="./sign-in.html" class="dropdown-item">Logout</a>
+                    
                 </div>
+                <div class="nav-item d-md-flex me-3">
+                    <div class="btn-list">
+                        <router-link to="/login" class="btn" rel="noreferrer">Login</router-link>
+                        <router-link to="/sign" class="btn" rel="noreferrer">Sign</router-link>
+                    </div>
                 </div>
+
             </div>
             </div>
         </header>

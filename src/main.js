@@ -26,4 +26,8 @@ import axios from 'axios'
 app.config.globalProperties.$http=axios
 
 app.use(router)
+
+import v_footer from './components/footer.vue'
+app.component('v_footer',v_footer)
+
 app.mount('#app')
