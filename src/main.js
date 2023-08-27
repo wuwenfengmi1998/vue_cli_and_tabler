@@ -1,3 +1,6 @@
+
+
+
 import './assets/dist/css/tabler.min.css'
 //import './assets/dist/css/tabler-flags.min.css'
 import './assets/dist/css/tabler-payments.min.css'
@@ -29,5 +32,4 @@ app.use(router)
 
 import v_footer from './components/footer.vue'
 app.component('v_footer',v_footer)
-
 app.mount('#app')

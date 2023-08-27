@@ -4,6 +4,103 @@ export default{
     components:{
         v_footer,
     },
+
+    data(){
+        return{
+            user:{},
+            user_is_sign:false,
+        }
+    },
+
+    methods:{
+        logout(){
+            localStorage.removeItem('user_token');
+            localStorage.removeItem('user_token_time');
+            this.user={};
+            this.user_is_sign=false;
+            sessionStorage.removeItem('sign_user');
+        }
+    },
+    mounted(){
+
+                //判断用户是否有token 是否有登录
+        var get_token_time = localStorage.getItem('user_token_time');
+        var get_token = localStorage.getItem('user_token');
+        var updata_user=false;
+        if(get_token_time==null)
+        {
+            //updata_user=true;
+
+        }else
+        {
+            if(get_token==null)
+            {
+                localStorage.removeItem('user_token');
+                localStorage.removeItem('user_token_time');
+            }else
+            {
+                var token_time = new Date(get_token_time).getTime();
+                var today = new Date().getTime();
+                if((token_time-today)<0)
+                {
+                    updata_user=false;
+                }else
+                {
+                    if(sessionStorage.getItem('sign_user')==null)
+                    {
+                        updata_user=true;
+                    }else{
+                        this.user=JSON.parse(sessionStorage.getItem('sign_user'));
+                        this.user_is_sign=true;
+                    }
+                }
+            }
+
+        }
+        //console.log(updata_user);
+        if(updata_user)
+        {
+            const params = new URLSearchParams();
+                params.append('token', localStorage.getItem('user_token'));  
+                this.$http({
+                    method:'POST',
+                    url:'/api/sign.php',
+                    data:params,
+                }).then(response=>{
+                    var error_data=response.data;
+                    //console.log(error_data);
+                    switch(error_data['error_code']){
+                        case 0:
+                            sessionStorage.setItem('sign_user',JSON.stringify(error_data['user']));
+                            localStorage.setItem('user_token',error_data['user']['token']);
+                            localStorage.setItem('user_token_time',error_data['user']['token_time']);
+                            //console.log(error_data['user']);
+                            this.user=JSON.parse(sessionStorage.getItem('sign_user'));
+                            this.user_is_sign=true;
+                            break;
+                        case 5:
+                            localStorage.removeItem('user_token');
+                            localStorage.removeItem('user_token_time');
+                            //console.log("token not found");
+                            break;
+                        case 6:
+                            localStorage.removeItem('user_token');
+                            localStorage.removeItem('user_token_time');
+                            //console.log("token time out");
+                            break;
+                        
+                    }
+
+                },error=>{
+                    //console.log("error");
+                });
+        }
+
+
+
+
+
+    }
 }
 </script>
 
@@ -47,95 +144,93 @@ export default{
 
                 </div>
                 
-                <div class="d-none d-md-flex">
-
-
-                <div class="nav-item dropdown d-none d-md-flex me-3">
-                    <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
-                    <!-- Download SVG icon from http://tabler-icons.io/i/bell -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" /><path d="M9 17v1a3 3 0 0 0 6 0v-1" /></svg>
-                    <span class="badge bg-red"></span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-end dropdown-menu-card">
-                    <div class="card">
-                        <div class="card-header">
-                        <h3 class="card-title">Last updates</h3>
-                        </div>
-                        <div class="list-group list-group-flush list-group-hoverable">
-                        <div class="list-group-item">
-                            <div class="row align-items-center">
-                            <div class="col-auto"><span class="status-dot status-dot-animated bg-red d-block"></span></div>
-                            <div class="col text-truncate">
-                                <a href="#" class="text-body d-block">Example 1</a>
-                                <div class="d-block text-secondary text-truncate mt-n1">
-                                Change deprecated html tags to text decoration classes (#29604)
+                <div v-if="user_is_sign" class="d-none d-md-flex">
+                    <div class="nav-item dropdown d-none d-md-flex me-3">
+                        <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/bell -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" /><path d="M9 17v1a3 3 0 0 0 6 0v-1" /></svg>
+                        <span class="badge bg-red"></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-end dropdown-menu-card">
+                        <div class="card">
+                            <div class="card-header">
+                            <h3 class="card-title">Last updates</h3>
+                            </div>
+                            <div class="list-group list-group-flush list-group-hoverable">
+                            <div class="list-group-item">
+                                <div class="row align-items-center">
+                                <div class="col-auto"><span class="status-dot status-dot-animated bg-red d-block"></span></div>
+                                <div class="col text-truncate">
+                                    <a href="#" class="text-body d-block">Example 1</a>
+                                    <div class="d-block text-secondary text-truncate mt-n1">
+                                    Change deprecated html tags to text decoration classes (#29604)
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <a href="#" class="list-group-item-actions">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/star -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon text-muted" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z" /></svg>
+                                    </a>
+                                </div>
                                 </div>
                             </div>
-                            <div class="col-auto">
-                                <a href="#" class="list-group-item-actions">
-                                <!-- Download SVG icon from http://tabler-icons.io/i/star -->
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon text-muted" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z" /></svg>
-                                </a>
-                            </div>
-                            </div>
-                        </div>
-                        <div class="list-group-item">
-                            <div class="row align-items-center">
-                            <div class="col-auto"><span class="status-dot d-block"></span></div>
-                            <div class="col text-truncate">
-                                <a href="#" class="text-body d-block">Example 2</a>
-                                <div class="d-block text-secondary text-truncate mt-n1">
-                                justify-content:between ⇒ justify-content:space-between (#29734)
+                            <div class="list-group-item">
+                                <div class="row align-items-center">
+                                <div class="col-auto"><span class="status-dot d-block"></span></div>
+                                <div class="col text-truncate">
+                                    <a href="#" class="text-body d-block">Example 2</a>
+                                    <div class="d-block text-secondary text-truncate mt-n1">
+                                    justify-content:between ⇒ justify-content:space-between (#29734)
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <a href="#" class="list-group-item-actions show">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/star -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon text-yellow" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z" /></svg>
+                                    </a>
+                                </div>
                                 </div>
                             </div>
-                            <div class="col-auto">
-                                <a href="#" class="list-group-item-actions show">
-                                <!-- Download SVG icon from http://tabler-icons.io/i/star -->
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon text-yellow" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z" /></svg>
-                                </a>
-                            </div>
-                            </div>
-                        </div>
-                        <div class="list-group-item">
-                            <div class="row align-items-center">
-                            <div class="col-auto"><span class="status-dot d-block"></span></div>
-                            <div class="col text-truncate">
-                                <a href="#" class="text-body d-block">Example 3</a>
-                                <div class="d-block text-secondary text-truncate mt-n1">
-                                Update change-version.js (#29736)
+                            <div class="list-group-item">
+                                <div class="row align-items-center">
+                                <div class="col-auto"><span class="status-dot d-block"></span></div>
+                                <div class="col text-truncate">
+                                    <a href="#" class="text-body d-block">Example 3</a>
+                                    <div class="d-block text-secondary text-truncate mt-n1">
+                                    Update change-version.js (#29736)
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <a href="#" class="list-group-item-actions">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/star -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon text-muted" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z" /></svg>
+                                    </a>
+                                </div>
                                 </div>
                             </div>
-                            <div class="col-auto">
-                                <a href="#" class="list-group-item-actions">
-                                <!-- Download SVG icon from http://tabler-icons.io/i/star -->
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon text-muted" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z" /></svg>
-                                </a>
-                            </div>
-                            </div>
-                        </div>
-                        <div class="list-group-item">
-                            <div class="row align-items-center">
-                            <div class="col-auto"><span class="status-dot status-dot-animated bg-green d-block"></span></div>
-                            <div class="col text-truncate">
-                                <a href="#" class="text-body d-block">Example 4</a>
-                                <div class="d-block text-secondary text-truncate mt-n1">
-                                Regenerate package-lock.json (#29730)
+                            <div class="list-group-item">
+                                <div class="row align-items-center">
+                                <div class="col-auto"><span class="status-dot status-dot-animated bg-green d-block"></span></div>
+                                <div class="col text-truncate">
+                                    <a href="#" class="text-body d-block">Example 4</a>
+                                    <div class="d-block text-secondary text-truncate mt-n1">
+                                    Regenerate package-lock.json (#29730)
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-auto">
-                                <a href="#" class="list-group-item-actions">
-                                <!-- Download SVG icon from http://tabler-icons.io/i/star -->
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon text-muted" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z" /></svg>
-                                </a>
+                                <div class="col-auto">
+                                    <a href="#" class="list-group-item-actions">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/star -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon text-muted" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z" /></svg>
+                                    </a>
+                                </div>
+                                </div>
                             </div>
                             </div>
                         </div>
                         </div>
                     </div>
-                    </div>
                 </div>
-                </div>
-                <div class="nav-item dropdown">
+                <div v-if="user_is_sign" class="nav-item dropdown">
                     <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
                         <span class="avatar avatar-sm" style="background-image: url(./static/avatars/000m.jpg)"></span>
                         <div class="d-none d-xl-block ps-2">
@@ -149,11 +244,11 @@ export default{
                         <a href="#" class="dropdown-item">Feedback</a>
                         <div class="dropdown-divider"></div>
                         <a href="./settings.html" class="dropdown-item">Settings</a>
-                        <a href="./sign-in.html" class="dropdown-item">Logout</a>
+                        <a href="" class="dropdown-item" @click.prevent="logout">Logout</a>
                     </div>
                     
                 </div>
-                <div class="nav-item d-md-flex me-3">
+                <div v-if="!user_is_sign" class="nav-item d-md-flex me-3">
                     <div class="btn-list">
                         <router-link to="/login" class="btn" rel="noreferrer">Login</router-link>
                         <router-link to="/sign" class="btn" rel="noreferrer">Sign</router-link>
