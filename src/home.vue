@@ -250,8 +250,14 @@ export default{
                 </div>
                 <div v-if="!user_is_sign" class="nav-item d-md-flex me-3">
                     <div class="btn-list">
-                        <router-link to="/login" class="btn" rel="noreferrer">Login</router-link>
-                        <router-link to="/sign" class="btn" rel="noreferrer">Sign</router-link>
+                        <router-link to="/login" class="btn" rel="noreferrer">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path><path d="M16 19h6"></path><path d="M19 16v6"></path><path d="M6 21v-2a4 4 0 0 1 4 -4h4"></path></svg>
+                          Login
+                        </router-link>
+                        <router-link to="/sign" class="btn btn-primary" rel="noreferrer">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path><path d="M6 21v-2a4 4 0 0 1 4 -4h4"></path><path d="M19 22v-6"></path><path d="M22 19l-3 -3l-3 3"></path></svg>
+                          Sign
+                        </router-link>
                     </div>
                 </div>
 

@@ -7,10 +7,12 @@ export default{
     data(){
         return{
             acc_name:'',
+            acc_email:'',
             acc_password:'',
             acc_confirm_passwoed:'',
 
             acc_name_placeholder:'',
+            acc_email_placeholder:'',
             acc_pass_placeholder:'',
             acc_c_pass_placeholder:'',
 
@@ -36,6 +38,28 @@ export default{
             }else{
                 this.acc_name_placeholder='';
             }
+            if(this.acc_email=='')
+            {
+                this.acc_email_placeholder='Please enter Email';
+                returnflag=1;
+            }else{
+                
+                //判断是否email
+                const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if(pattern.test(this.acc_email)){
+                  //是邮箱
+                  this.acc_email_placeholder='';
+                }else
+                {
+                  //not
+                  this.acc_email_placeholder='This is not Email';
+                  returnflag=1;
+                }
+            }
+
+
+
+
             if(this.acc_password=='')
             {
                 this.acc_pass_placeholder='Please enter password';
@@ -66,6 +90,7 @@ export default{
                 //console.log("try get");
                 const params = new URLSearchParams();
                 params.append('username', this.acc_name);
+                params.append('email', this.acc_email);
                 params.append('password', this.acc_password);
                 this.$http({
                     method:'POST',
@@ -152,13 +177,19 @@ export default{
               </h2>
               <form @submit.prevent="submit_c">
                 <div class="mb-3">
-                  <label class="form-label">Address Name</label>
+                  <label class="form-label">Address</label>
                    <div class="input-group input-group-flat">
-                    <input type="text" class="form-control" placeholder="Name" autocomplete="off" v-model.trim="acc_name">
+                    <input type="text" class="form-control" placeholder="Login Name" autocomplete="off" v-model.trim="acc_name">
                     <span class="input-group-text">
                         <span class="badge bg-red" v-show="acc_name_placeholder">{{this.acc_name_placeholder}}</span>
                     </span>
-                  </div>                 
+                  </div>   
+                  <div class="input-group input-group-flat">
+                    <input type="email" class="form-control mt-2" placeholder="Email" autocomplete="off" v-model.trim="acc_email">
+                    <span class="input-group-text mt-2">
+                        <span class="badge bg-red" v-show="acc_email_placeholder">{{this.acc_email_placeholder}}</span>
+                    </span>
+                  </div>               
                 </div>
                 <div class="mb-2">
                   <label class="form-label">

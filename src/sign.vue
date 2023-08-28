@@ -138,9 +138,6 @@ export default{
                 <div class="mb-2">
                   <label class="form-label">
                     Password
-                    <span class="form-label-description">
-                      <a href="./forgot-password.html">I forgot password</a>
-                    </span>
                   </label>
                   <div class="input-group input-group-flat">
                     <input type="password" class="form-control"  placeholder="Password"  autocomplete="off" v-model.trim="password"> 
@@ -161,7 +158,10 @@ export default{
               </form>
               <div class="text-center text-secondary mt-3">
                 Don't have account yet? <router-link to="/login">Login</router-link>
+                or
+                <a href="./forgot-password.html">I forgot password</a>
               </div>
+
               <v_footer></v_footer>
             </div>
           </div>
