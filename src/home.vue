@@ -44,6 +44,10 @@ export default{
                 if((token_time-today)<0)
                 {
                     updata_user=false;
+                    //本地token过期
+                    localStorage.removeItem('user_token');
+                    localStorage.removeItem('user_token_time');
+                    sessionStorage.removeItem('sign_user');
                 }else
                 {
                     if(sessionStorage.getItem('sign_user')==null)
