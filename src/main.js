@@ -30,6 +30,8 @@ app.config.globalProperties.$http=axios
 
 app.use(router)
 
+import v_header from './components/header.vue'
 import v_footer from './components/footer.vue'
 app.component('v_footer',v_footer)
+app.component('v_header',v_header)
 app.mount('#app')
