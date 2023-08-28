@@ -2,7 +2,7 @@ import { createRouter,createWebHashHistory } from "vue-router";
 import home from './home.vue'
 import login from './login.vue'
 import sign from './sign.vue'
-import config from './config.vue'
+import config_account from './config_account.vue'
 
 const router = createRouter({
 
@@ -13,7 +13,7 @@ const router = createRouter({
         {path: '/home',component:home},
         {path: '/login',component:login},
         {path: '/sign',component:sign},
-        {path: '/config',component:config},
+        {path: '/config_account',component:config_account},
 
     ]
 

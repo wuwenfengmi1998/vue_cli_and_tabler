@@ -107,6 +107,9 @@ export default{
                             //this.acc_name='';
                             this.acc_name_placeholder='Duplicate user name';
                             break;
+                        case 21:
+                          this.acc_email_placeholder='This is not Email';
+                          break;
                     }
 
                 },error=>{
