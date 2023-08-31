@@ -4,6 +4,7 @@ export default{
         return{
             user:{},
             user_is_sign:false,
+            h_test:'test'
         }
     },
 
@@ -13,6 +14,9 @@ export default{
             localStorage.removeItem('user_token_time');
             this.user={};
             this.user_is_sign=false;
+            
+            //this.global_.user={};
+            //this.global_.user_is_sign=false;
             sessionStorage.removeItem('sign_user');
         }
     },
@@ -51,6 +55,10 @@ export default{
                     }else{
                         this.user=JSON.parse(sessionStorage.getItem('sign_user'));
                         this.user_is_sign=true;
+
+                        
+                        //this.global_.user=JSON.parse(sessionStorage.getItem('sign_user'));
+                        //this.global_.user_is_sign=true;
                     }
                 }
             }
@@ -76,6 +84,10 @@ export default{
                             //console.log(error_data['user']);
                             this.user=JSON.parse(sessionStorage.getItem('sign_user'));
                             this.user_is_sign=true;
+
+                            
+                            //this.global_.user=JSON.parse(sessionStorage.getItem('sign_user'));
+                            //this.global_.user_is_sign=true;
                             break;
                         case 5:
                             localStorage.removeItem('user_token');
@@ -216,8 +228,8 @@ export default{
                     <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
                         <span class="avatar avatar-sm" style="background-image: url(./static/avatars/000m.jpg)"></span>
                         <div class="d-none d-xl-block ps-2">
-                        <div>Paweł Kuna</div>
-                        <div class="mt-1 small text-secondary">UI Designer</div>
+                        <div>{{this.user['info']['true_name']}}</div>
+                        <div class="mt-1 small text-secondary">{{this.user['info']['remark']}}</div>
                         </div>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">

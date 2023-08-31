@@ -34,4 +34,8 @@ import v_header from './components/header.vue'
 import v_footer from './components/footer.vue'
 app.component('v_footer',v_footer)
 app.component('v_header',v_header)
+
+import global_ from './global_var.vue'
+//console.log(global_.global_test)
+
 app.mount('#app')
