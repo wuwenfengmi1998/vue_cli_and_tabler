@@ -52,8 +52,8 @@ export default{
                     switch(error_data['error_code']){
                         case 0:
                             sessionStorage.setItem('sign_user',JSON.stringify(error_data['user']));
-                            localStorage.setItem('user_token',error_data['user']['token']);
-                            localStorage.setItem('user_token_time',error_data['user']['token_time']);
+                            localStorage.setItem('user_token',error_data['user']['acc']['token']);
+                            localStorage.setItem('user_token_time',error_data['user']['acc']['token_time']);
                             //console.log(error_data['user']);
                             this.$router.push('/home');
                             break;

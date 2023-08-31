@@ -1,14 +1,22 @@
 <script>
 export default{
+
+    //emits:['user_info'],
+
     data(){
         return{
-            user:{},
             user_is_sign:false,
             h_test:'test'
         }
     },
 
     methods:{
+        sign(user)
+        {
+            
+
+            //console.log(user);
+        },
         logout(){
             localStorage.removeItem('user_token');
             localStorage.removeItem('user_token_time');
@@ -18,6 +26,7 @@ export default{
             //this.global_.user={};
             //this.global_.user_is_sign=false;
             sessionStorage.removeItem('sign_user');
+            sessionStorage.removeItem('sign_user_is_sign');
         }
     },
     mounted(){
@@ -34,8 +43,7 @@ export default{
         {
             if(get_token==null)
             {
-                localStorage.removeItem('user_token');
-                localStorage.removeItem('user_token_time');
+                this.logout();
             }else
             {
                 var token_time = new Date(get_token_time).getTime();
@@ -44,21 +52,14 @@ export default{
                 {
                     updata_user=false;
                     //本地token过期
-                    localStorage.removeItem('user_token');
-                    localStorage.removeItem('user_token_time');
-                    sessionStorage.removeItem('sign_user');
+                    this.logout();
                 }else
                 {
-                    if(sessionStorage.getItem('sign_user')==null)
+                    if((sessionStorage.getItem('sign_user')==null)|(sessionStorage.getItem('sign_user_is_sign')==null))
                     {
                         updata_user=true;
                     }else{
-                        this.user=JSON.parse(sessionStorage.getItem('sign_user'));
                         this.user_is_sign=true;
-
-                        
-                        //this.global_.user=JSON.parse(sessionStorage.getItem('sign_user'));
-                        //this.global_.user_is_sign=true;
                     }
                 }
             }
@@ -75,28 +76,26 @@ export default{
                     data:params,
                 }).then(response=>{
                     var error_data=response.data;
-                    //console.log(error_data);
+                    console.log(error_data);
                     switch(error_data['error_code']){
                         case 0:
+                            //this.sign(error_data['user']);
+                            localStorage.setItem('user_token',error_data['user']['acc']['token']);
+                            localStorage.setItem('user_token_time',error_data['user']['acc']['token_time']);
+
                             sessionStorage.setItem('sign_user',JSON.stringify(error_data['user']));
-                            localStorage.setItem('user_token',error_data['user']['token']);
-                            localStorage.setItem('user_token_time',error_data['user']['token_time']);
-                            //console.log(error_data['user']);
-                            this.user=JSON.parse(sessionStorage.getItem('sign_user'));
+                            sessionStorage.setItem('sign_user_is_sign',true);
+
                             this.user_is_sign=true;
 
-                            
-                            //this.global_.user=JSON.parse(sessionStorage.getItem('sign_user'));
-                            //this.global_.user_is_sign=true;
+                            //console.log(error_data);
                             break;
                         case 5:
-                            localStorage.removeItem('user_token');
-                            localStorage.removeItem('user_token_time');
+                            this.logout();
                             //console.log("token not found");
                             break;
                         case 6:
-                            localStorage.removeItem('user_token');
-                            localStorage.removeItem('user_token_time');
+                            this.logout();
                             //console.log("token time out");
                             break;
                         
@@ -106,6 +105,10 @@ export default{
                     //console.log("error");
                 });
         }
+
+
+
+        //console.log(this.toot.global_.global_test);
     }
 }
 </script>
@@ -228,8 +231,8 @@ export default{
                     <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
                         <span class="avatar avatar-sm" style="background-image: url(./static/avatars/000m.jpg)"></span>
                         <div class="d-none d-xl-block ps-2">
-                        <div>{{this.user['info']['true_name']}}</div>
-                        <div class="mt-1 small text-secondary">{{this.user['info']['remark']}}</div>
+                        <div>username</div>
+                        <div class="mt-1 small text-secondary">info</div>
                         </div>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
