@@ -1,12 +1,12 @@
 <script>
 
-const global_test='test';
+const test='test';
 
 let user={};
 let user_is_sign=false;
   export default
   {
-    global_test,
+    test,
     user,
     user_is_sign,
   }

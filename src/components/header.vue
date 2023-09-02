@@ -1,4 +1,6 @@
 <script>
+import jsvectormapMin from '@/assets/dist/libs/jsvectormap/dist/js/jsvectormap.min';
+
 export default{
 
     //emits:['user_info'],
@@ -6,15 +8,31 @@ export default{
     data(){
         return{
             user_is_sign:false,
-            h_test:'test'
+            user:{},
+            h_test:'test',
+            avatar:"background-image: url(./avatar.jpg)"
         }
     },
 
     methods:{
         sign(user)
         {
-            
+            localStorage.setItem('user_token',user['acc']['token']);
+            localStorage.setItem('user_token_time',user['acc']['token_time']);
 
+            sessionStorage.setItem('sign_user',JSON.stringify(user));
+            sessionStorage.setItem('sign_user_is_sign',true);
+
+            this.user_is_sign=true;
+            this.user=user;
+
+            if(this.user['info']['avatar']==null)
+            {
+                this.avatar="background-image: url(./avatar.jpg)";
+            }else
+            {
+                this.avatar="background-image: url("+this.user['info']['avatar']+")";
+            }
             //console.log(user);
         },
         logout(){
@@ -31,7 +49,7 @@ export default{
     },
     mounted(){
 
-                //判断用户是否有token 是否有登录
+        //判断用户是否有token 是否有登录
         var get_token_time = localStorage.getItem('user_token_time');
         var get_token = localStorage.getItem('user_token');
         var updata_user=false;
@@ -59,13 +77,17 @@ export default{
                     {
                         updata_user=true;
                     }else{
-                        this.user_is_sign=true;
+                        this.sign(JSON.parse(sessionStorage.getItem('sign_user')));
                     }
                 }
             }
 
         }
         //console.log(updata_user);
+        //if(sessionStorage.getItem('user_updata_flag')=='true'){
+        //    sessionStorage.removeItem('user_updata_flag');
+        //    updata_user=true;
+        //}
         if(updata_user)
         {
             const params = new URLSearchParams();
@@ -79,14 +101,8 @@ export default{
                     console.log(error_data);
                     switch(error_data['error_code']){
                         case 0:
-                            //this.sign(error_data['user']);
-                            localStorage.setItem('user_token',error_data['user']['acc']['token']);
-                            localStorage.setItem('user_token_time',error_data['user']['acc']['token_time']);
-
-                            sessionStorage.setItem('sign_user',JSON.stringify(error_data['user']));
-                            sessionStorage.setItem('sign_user_is_sign',true);
-
-                            this.user_is_sign=true;
+                            this.sign(error_data['user']);
+  
 
                             //console.log(error_data);
                             break;
@@ -116,6 +132,7 @@ export default{
 <template>
            <header class="navbar navbar-expand-md d-print-none" >
             <div class="container-xl">
+                
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -129,7 +146,7 @@ export default{
                 <div class="btn-list">
                     <a href="https://git.lmve.net/kevin/tabler_and_vue" class="btn" target="_blank" rel="noreferrer">
                     <!-- Download SVG icon from http://tabler-icons.io/i/brand-github -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M21 14l-9 7l-9 -7l3 -11l3 7h6l3 -7z"></path></svg>
                     Source code
                     </a>
                     <a href="https://git.lmve.net/kevin" class="btn" target="_blank" rel="noreferrer">
@@ -229,18 +246,18 @@ export default{
                 </div>
                 <div v-if="user_is_sign" class="nav-item dropdown">
                     <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-                        <span class="avatar avatar-sm" style="background-image: url(./static/avatars/000m.jpg)"></span>
+                        <span class="avatar avatar-sm" :style="this.avatar"></span>
                         <div class="d-none d-xl-block ps-2">
-                        <div>username</div>
-                        <div class="mt-1 small text-secondary">info</div>
+                        <div>{{this.user['info']['real_name']}}</div>
+                        <div class="mt-1 small text-secondary">{{this.user['info']['remark']}}</div>
                         </div>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                        <a href="#" class="dropdown-item">Status</a>
-                        <a href="./profile.html" class="dropdown-item">Profile</a>
-                        <a href="#" class="dropdown-item">Feedback</a>
+                        
+                        
+                        <router-link to="/config_account" class="dropdown-item">Profile</router-link>
                         <div class="dropdown-divider"></div>
-                        <a href="./settings.html" class="dropdown-item">Settings</a>
+                        <a href="#" class="dropdown-item">Settings</a>
                         <a href="" class="dropdown-item" @click.prevent="logout">Logout</a>
                     </div>
                     

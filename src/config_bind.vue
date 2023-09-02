@@ -25,7 +25,7 @@ export default{
         <div class="page-body">
           <div class="container-xl">
             <div class="card">
-              <div class="row g-0">
+              <div class="row">
                 <config_card></config_card>
                 <div class="col-12 col-md-9 d-flex flex-column">
                   <div class="card-body">
@@ -33,7 +33,7 @@ export default{
                     <h3 class="card-title mt-4">Email</h3>
                     <p class="card-subtitle">This contact will be shown to others publicly, so choose it carefully.</p>
                     <div>
-                      <div class="row g-2">
+                      <div class="row g-3">
                         <div class="col-auto">
                           <input type="text" class="form-control w-auto" value="paweluna@howstuffworks.com">
                         </div>
