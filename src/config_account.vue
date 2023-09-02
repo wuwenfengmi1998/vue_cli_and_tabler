@@ -13,6 +13,7 @@ export default{
       user_id:"",
       user_rmark:"",
       user_sex:"",
+      user_name:"",
     }
   },
   methods:{
@@ -30,10 +31,18 @@ export default{
           data:params,
       }).then(response=>{
           var error_data=response.data;
-          console.log(error_data);
+          //console.log(error_data);
           switch(error_data['error_code']){
               case 0:
-                  //sessionStorage.setItem('user_updata_flag',true);
+
+                  this.user['info']['real_name']=this.real_name;
+                  this.user['info']['remark']=this.user_rmark;
+                  this.user['info']['sex']=this.user_sex;
+                  
+                  sessionStorage.setItem('sign_user',JSON.stringify(this.user));
+                  location.reload();
+                  //console.log("updata");
+                  //this.$forceUpdate;
                   break;
               case 7:
               
@@ -62,10 +71,12 @@ export default{
       {
           this.avatar="background-image: url("+this.user['info']['avatar']+")";
           this.real_name=this.user['info']['real_name'];
-          this.user_id=this.user['info']['user_id'];
           this.user_rmark=this.user['info']['remark'];
           this.user_sex=this.user['info']['sex'];
+
           this.token=this.user['acc']['token'];
+          this.user_id=this.user['acc']['id'];
+          this.user_name=this.user['acc']['name'];
       }
 
     }
@@ -92,12 +103,18 @@ export default{
           <div class="container-xl">
             <div class="card">
               <div class="row g-0">
-                <config_card></config_card>
+                <config_card :user="this.user"></config_card>
                 <div class="col-12 col-md-9 d-flex flex-column">
                   <div class="card-body">
-                    <h2 class="mb-4">My Account</h2>
-                    <h3 class="card-title">Profile Details</h3>
-                    <div class="form-label">User id: {{this.user_id}}</div>
+                    <h2 class="mb-4">My account
+                    <div class="form-label">id: {{this.user_id}}</div>
+                    
+                    </h2>
+                    <h3 class="card-title">Profile Details
+                      <div class="form-label">Sign Name: {{this.user_name}}</div>
+                    </h3>
+                    
+                    
                     <div class="row align-items-center">
                       <div class="col-auto"><span class="avatar avatar-xl" :style="this.avatar"></span>
                       </div>
@@ -109,6 +126,7 @@ export default{
                         </a></div>
                     </div>
                     <h3 class="card-title mt-4">Business Profile</h3>
+                    
                     <div class="row g-3">
                       <div class="col-md">
                         <div class="form-label">Real Name</div>
