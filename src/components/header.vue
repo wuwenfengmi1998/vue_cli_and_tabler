@@ -17,8 +17,8 @@ export default{
     methods:{
         sign(user)
         {
-            localStorage.setItem('user_token',user['acc']['token']);
-            localStorage.setItem('user_token_time',user['acc']['token_time']);
+            //localStorage.setItem('user_token',user['acc']['token']);
+            //localStorage.setItem('user_token_time',user['acc']['token_time']);
 
             sessionStorage.setItem('sign_user',JSON.stringify(user));
             sessionStorage.setItem('sign_user_is_sign',true);
@@ -26,13 +26,23 @@ export default{
             this.user_is_sign=true;
             this.user=user;
 
-            if(this.user['info']['avatar']==null)
+            if(this.user['info']==null)
             {
                 this.avatar="background-image: url(./avatar.jpg)";
+                this.user['info']['real_name']="";
+                this.user['info']['remark']="";
+                this.user['info']['sex']="";
             }else
             {
-                this.avatar="background-image: url("+this.user['info']['avatar']+")";
+                if(this.user['info']['avatar']==null|this.user['info']['avatar']=='')
+                {
+                    this.avatar="background-image: url(./avatar.jpg)";
+                }else
+                {
+                    this.avatar="background-image: url("+this.user['info']['avatar']+")";
+                }
             }
+
             //console.log(user);
         },
         logout(){
@@ -53,35 +63,37 @@ export default{
         var get_token_time = localStorage.getItem('user_token_time');
         var get_token = localStorage.getItem('user_token');
         var updata_user=false;
-        if(get_token_time==null)
-        {
-            //updata_user=true;
 
-        }else
+
+        if((sessionStorage.getItem('sign_user')==null)|(sessionStorage.getItem('sign_user_is_sign')==null))
         {
-            if(get_token==null)
+            if(get_token_time==null)
             {
-                this.logout();
+                //updata_user=true;
+
             }else
             {
-                var token_time = new Date(get_token_time).getTime();
-                var today = new Date().getTime();
-                if((token_time-today)<0)
+                if(get_token==null)
                 {
-                    updata_user=false;
-                    //本地token过期
                     this.logout();
                 }else
                 {
-                    if((sessionStorage.getItem('sign_user')==null)|(sessionStorage.getItem('sign_user_is_sign')==null))
+                    var token_time = new Date(get_token_time).getTime();
+                    var today = new Date().getTime();
+                    if((token_time-today)<0)
+                    {
+                        updata_user=false;
+                        //本地token过期
+                        this.logout();
+                    }else
                     {
                         updata_user=true;
-                    }else{
-                        this.sign(JSON.parse(sessionStorage.getItem('sign_user')));
                     }
                 }
-            }
 
+            }           
+        }else{
+            this.sign(JSON.parse(sessionStorage.getItem('sign_user')));
         }
         //console.log(updata_user);
         //if(sessionStorage.getItem('user_updata_flag')=='true'){

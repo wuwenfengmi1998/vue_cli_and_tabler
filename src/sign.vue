@@ -12,6 +12,8 @@ export default{
 
             acc_name_placeholder:'',
             acc_pass_placeholder:'',
+
+            remember:false,
         }
     },
     methods:{
@@ -52,8 +54,13 @@ export default{
                     switch(error_data['error_code']){
                         case 0:
                             sessionStorage.setItem('sign_user',JSON.stringify(error_data['user']));
-                            localStorage.setItem('user_token',error_data['user']['acc']['token']);
-                            localStorage.setItem('user_token_time',error_data['user']['acc']['token_time']);
+                            sessionStorage.setItem('sign_user_is_sign',true);
+                            if(this.remember)
+                            {
+                              localStorage.setItem('user_token',error_data['user']['acc']['token']);
+                              localStorage.setItem('user_token_time',error_data['user']['acc']['token_time']);
+                            }
+
                             //console.log(error_data['user']);
                             this.$router.push('/home');
                             break;
@@ -148,7 +155,7 @@ export default{
                 </div>
                 <div class="mb-2">
                   <label class="form-check">
-                    <input type="checkbox" class="form-check-input"/>
+                    <input type="checkbox" class="form-check-input" v-model.trim="remember"/>
                     <span class="form-check-label">Remember me on this device</span>
                   </label>
                 </div>

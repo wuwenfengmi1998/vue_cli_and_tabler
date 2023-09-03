@@ -14,9 +14,29 @@ export default{
       user_rmark:"",
       user_sex:"",
       user_name:"",
+      avatar_file:"",
+      avatar_msg:"",
     }
   },
   methods:{
+
+    upload_avater_file(e){
+      let file =e.target.files[0];
+      if(file.type=='image/gif'|file.type=='image/png'|file.type=='image/bmp'|file.type=='image/jpeg'){
+        
+        if(file.size<50000000)
+        {
+          this.avatar_msg=""
+          this.avatar_file=file;
+        }else
+        {
+          this.avatar_msg="File size > 50M"
+        }
+      }else{
+        this.avatar_msg="File type worng"
+      }
+    },
+
     submit()
     {
       const params = new URLSearchParams();
@@ -24,6 +44,7 @@ export default{
       params.append('real_name', this.real_name);
       params.append('user_rmark', this.user_rmark);
       params.append('user_sex', this.user_sex);
+      params.append('avatar_file', this.avatar_file);
 
       this.$http({
           method:'POST',
@@ -58,25 +79,29 @@ export default{
     }
   },
   mounted(){
-    if((sessionStorage.getItem('sign_user')==null)|(localStorage.getItem('user_token')==null)){
+    if(sessionStorage.getItem('sign_user')==null){
       //return to sign
       this.$router.push('/sign');
     }else{
       //join data
       this.user=JSON.parse(sessionStorage.getItem('sign_user'));
-      if(this.user['info']['avatar']==null)
+
+      this.real_name=this.user['info']['real_name'];
+      this.user_rmark=this.user['info']['remark'];
+      this.user_sex=this.user['info']['sex'];
+
+      this.token=this.user['acc']['token'];
+      this.user_id=this.user['acc']['id'];
+      this.user_name=this.user['acc']['name'];
+
+      
+      if(this.user['info']['avatar']==null|this.user['info']['avatar']=='')
       {
           this.avatar="background-image: url(./avatar.jpg)";
       }else
       {
           this.avatar="background-image: url("+this.user['info']['avatar']+")";
-          this.real_name=this.user['info']['real_name'];
-          this.user_rmark=this.user['info']['remark'];
-          this.user_sex=this.user['info']['sex'];
 
-          this.token=this.user['acc']['token'];
-          this.user_id=this.user['acc']['id'];
-          this.user_name=this.user['acc']['name'];
       }
 
     }
@@ -115,16 +140,11 @@ export default{
                     </h3>
                     
                     
-                    <div class="row align-items-center">
-                      <div class="col-auto"><span class="avatar avatar-xl" :style="this.avatar"></span>
-                      </div>
-                      <div class="col-auto"><a href="#" class="btn">
-                          Change avatar
-                        </a></div>
-                      <div class="col-auto"><a href="#" class="btn btn-ghost-danger">
-                          Delete avatar
-                        </a></div>
-                    </div>
+                    
+                    <div class="col-auto"><span class="avatar avatar-xl" :style="this.avatar"></span></div>
+                    <input type="file" accept="image/gif,image/png,image/bmp,image/jpeg" class="file mt-1" @change="upload_avater_file"/>
+                    <span class="badge bg-red mt-1" v-show="this.avatar_msg">{{this.avatar_msg}}</span>
+                    
                     <h3 class="card-title mt-4">Business Profile</h3>
                     
                     <div class="row g-3">
