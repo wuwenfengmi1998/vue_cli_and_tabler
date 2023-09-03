@@ -14,7 +14,7 @@ export default{
       user_rmark:"",
       user_sex:"",
       user_name:"",
-      avatar_file:"",
+      avatar_file:[],
       avatar_msg:"",
     }
   },
@@ -39,7 +39,7 @@ export default{
 
     submit()
     {
-      const params = new URLSearchParams();
+      const params = new FormData();
       params.append('token', this.token);
       params.append('real_name', this.real_name);
       params.append('user_rmark', this.user_rmark);
@@ -94,7 +94,7 @@ export default{
       this.user_id=this.user['acc']['id'];
       this.user_name=this.user['acc']['name'];
 
-      
+
       if(this.user['info']['avatar']==null|this.user['info']['avatar']=='')
       {
           this.avatar="background-image: url(./avatar.jpg)";
