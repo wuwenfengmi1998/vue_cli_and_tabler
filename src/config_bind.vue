@@ -2,7 +2,29 @@
 import config_card from './components/config_card.vue'
 export default{
   components:{
-    config_card
+    config_card  
+  },
+  data(){
+    return{
+      user:{},
+      user_email:'',
+    }
+  },
+  methods:{
+    email_change()
+    {
+      
+    }
+  },
+  mounted(){
+    if(sessionStorage.getItem('sign_user')==null){
+      //return to sign
+      this.$router.push('/sign');
+    }else{
+      //join data
+      this.user=JSON.parse(sessionStorage.getItem('sign_user'));
+      this.user_email=this.user['acc']['email'];
+    }
   }
 }
 </script>
@@ -35,9 +57,9 @@ export default{
                     <div>
                       <div class="row g-3">
                         <div class="col-auto">
-                          <input type="text" class="form-control w-auto" value="paweluna@howstuffworks.com">
+                          <input type="text" class="form-control w-auto" v-model.trim:value="this.user_email">
                         </div>
-                        <div class="col-auto"><a href="#" class="btn">
+                        <div class="col-auto"><a class="btn" @click.prevent="email_change">
                             Change
                           </a></div>
                       </div>
