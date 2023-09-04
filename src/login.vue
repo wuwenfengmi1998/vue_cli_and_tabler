@@ -187,9 +187,9 @@ export default{
                         <span class="badge bg-red" v-show="acc_name_placeholder">{{this.acc_name_placeholder}}</span>
                     </span>
                   </div>   
-                  <div class="input-group input-group-flat">
-                    <input type="email" class="form-control mt-2" placeholder="Email" autocomplete="off" v-model.trim="acc_email">
-                    <span class="input-group-text mt-2">
+                  <div class="input-group input-group-flat mt-2">
+                    <input type="email" class="form-control" placeholder="Email" autocomplete="off" v-model.trim="acc_email">
+                    <span class="input-group-text">
                         <span class="badge bg-red" v-show="acc_email_placeholder">{{this.acc_email_placeholder}}</span>
                     </span>
                   </div>               
