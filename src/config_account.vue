@@ -63,11 +63,11 @@ export default{
                   location.reload();
                   
                   break;
-              case 7:
-              
+              case 5:
+                  this.$router.push('/sign');
                   break;
-              case 71:
-              
+              case 6:
+                  this.$router.push('/sign');
                   break;
           }
 
