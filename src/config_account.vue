@@ -56,14 +56,12 @@ export default{
           switch(error_data['error_code']){
               case 0:
 
-                  this.user['info']['real_name']=this.real_name;
-                  this.user['info']['remark']=this.user_rmark;
-                  this.user['info']['sex']=this.user_sex;
+                  this.user=error_data['user']
+                  
                   
                   sessionStorage.setItem('sign_user',JSON.stringify(this.user));
                   location.reload();
-                  //console.log("updata");
-                  //this.$forceUpdate;
+                  
                   break;
               case 7:
               
