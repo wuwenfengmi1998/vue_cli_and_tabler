@@ -21,12 +21,15 @@ import { createApp } from 'vue'
 import App from './App.vue'
 
 
-import router from './router'
+
+
 const app=createApp(App)
 
 import axios from 'axios'
 //axios.defaults.baseURL='https://api.lmve.net/'
 app.config.globalProperties.$http=axios
+
+import router from './router'
 
 app.use(router)
 

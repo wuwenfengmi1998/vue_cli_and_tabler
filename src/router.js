@@ -10,16 +10,29 @@ const router = createRouter({
     history: createWebHashHistory(),
 
     routes:[
-        {path: '/',component:home},
-        {path: '/home',component:home},
-        {path: '/login',component:login},
-        {path: '/sign',component:sign},
-        {path: '/config_account',component:config_account},
-        {path: '/config_bind',component:config_bind},
-        {path: '/config_password',component:config_password},
+        {path: '/',component:home,meta:{title:'home'}},
+        {path: '/home',component:home,meta:{title:'home'}},
+        {path: '/login',component:login,meta:{title:'login'}},
+        {path: '/sign',component:sign,meta:{title:'sign'}},
+        {path: '/config_account',component:config_account,meta:{title:'account'}},
+        {path: '/config_bind',component:config_bind,meta:{title:'bind'}},
+        {path: '/config_password',component:config_password,meta:{title:'password'}},
 
     ]
 
+})
+
+router.beforeEach((to, from, next) => {
+    //beforeEach是router的钩子函数，在进入路由前执行
+    if (to.meta.title) {
+        //判断是否有标题
+        //console.log(to.meta.title)
+        document.title = to.meta.title
+    } else {
+        console.log('no title')
+        document.title = 'Hi VUE'
+    }
+    next()
 })
 
 export default router
