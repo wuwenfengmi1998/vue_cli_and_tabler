@@ -150,7 +150,7 @@ export default{
             </button>
             <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
                 <a href=".">
-                <img src="../assets/static/logo.svg" width="110" height="32" alt="Tabler" class="navbar-brand-image">
+                <img src="/logo.svg" width="110" height="32" alt="Tabler" class="navbar-brand-image">
                 </a>
             </h1>
             <div class="navbar-nav flex-row order-md-last">
@@ -180,7 +180,7 @@ export default{
                         <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-end dropdown-menu-card">
                         <div class="card">
                             <div class="card-header">
-                            <h3 class="card-title">Last updates</h3>
+                            <router-link to="chat">Open chat</router-link>
                             </div>
                             <div class="list-group list-group-flush list-group-hoverable">
                             <div class="list-group-item">

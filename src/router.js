@@ -5,6 +5,7 @@ import sign from './sign.vue'
 import config_account from './config_account.vue'
 import config_bind from './config_bind.vue'
 import config_password from './config_password.vue'
+import chat from './chat.vue'
 const router = createRouter({
 
     history: createWebHashHistory(),
@@ -17,6 +18,7 @@ const router = createRouter({
         {path: '/config_account',component:config_account,meta:{title:'account'}},
         {path: '/config_bind',component:config_bind,meta:{title:'bind'}},
         {path: '/config_password',component:config_password,meta:{title:'password'}},
+        {path: '/chat',component:chat,meta:{title:'chat'}},
 
     ]
 
