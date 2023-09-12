@@ -7,23 +7,148 @@ export default{
   data(){
     return{
         send_buff:"",
+        token:"",
+        user:{},
+        user_id:"",
+        chats:[],
+        chat_history:[],
+        chat_sele:-1,
     }
   },
   methods:{
+
+    seitch_chat_sele(sele)
+    {
+        this.chat_sele=sele;
+    },
+
     send(){
         if(this.send_buff!="")
         {
-            console.log(this.send_buff);
-            this.send_buff="";
+            const params = new FormData();
+            params.append('token', this.token);
+            params.append('mod', 'send');
+            params.append('to_id', 0);
+            params.append('msg', this.send_buff);
+            
+
+            this.$http({
+                method:'POST',
+                url:'/api/chat.php',
+                data:params,
+            }).then(response=>{
+                var error_data=response.data;
+                //console.log(error_data);
+                switch(error_data['error_code']){
+                    case 0:
+
+                       
+                        
+                        break;
+                    case 5:
+                        this.$router.push('/sign');
+                        break;
+                    case 6:
+                        this.$router.push('/sign');
+                        break;
+                }
+
+            },error=>{
+                console.log("error");
+            });
         }
+            
+        this.send_buff="";
         
+    
     }
   },
   mounted(){
+//for test
+this.chat_history=[
+    {
+        'id':'1',
+        'from_id':'1',
+        'to_id':'0',
+        'msg':'123',
+        'time':'2023-09-11 19:42:54',
+    },
+    {
+        'id':'2',
+        'from_id':'1',
+        'to_id':'0',
+        'msg':'abc',
+        'time':'2023-09-11 19:42:54',
+    },
+    {
+        'id':'3',
+        'from_id':'1',
+        'to_id':'0',
+        'msg':'qwe',
+        'time':'2023-09-11 19:42:54',
+    },
+];
 
+
+
+    if(sessionStorage.getItem('sign_user')==null){
+      //return to sign
+      this.$router.push('/sign');
+    }else{
+        this.user=JSON.parse(sessionStorage.getItem('sign_user'));
+        this.token=this.user['acc']['token'];
+
+        //get chat list
+        const params = new FormData();
+        params.append('token', this.token);
+        params.append('mod', 'getchatlist');
+        
+        this.$http({
+            method:'POST',
+            url:'/api/chat.php',
+            data:params,
+        }).then(response=>{
+            var error_data=response.data;
+            //console.log(error_data);
+            switch(error_data['error_code']){
+                case 0:
+
+                    this.chats=error_data['list'];
+                    
+                    break;
+                case 5:
+                    this.$router.push('/sign');
+                    break;
+                case 6:
+                    this.$router.push('/sign');
+                    break;
+            }
+
+        },error=>{
+            console.log("error");
+        });       
+    }
   }
 }
+
+
 </script>
+
+<style>
+
+.chatlist{
+    padding-left: 10px;padding-right: 10px;
+}
+
+.chatlist_sele{
+    padding-left: 10px;padding-right: 10px;
+    background-color: #199fec4d;
+}
+
+.chatlist:hover{
+    background-color: rgba(127, 190, 245, 0.993);
+}
+</style>
 <template>
 <v_header></v_header>
 <div class="page-wrapper">
@@ -53,73 +178,33 @@ export default{
                                 <div class="divide-y">
                                 <div>
                                     <div class="row">
+                                    </div>
+                                </div>                                   
+                                <div v-for="(item, key) in this.chats" :class='key==this.chat_sele?"chatlist_sele":"chatlist"' @click.prevent="seitch_chat_sele(key)">
+                                    <div class="row">
                                         <div class="col-auto">
-                                            <span class="avatar">JL</span>
+                                            <span class="avatar" :style='"background-image: url("+item.avatar+");"'></span>
                                         </div>
                                         <div class="col">
                                             <div class="text-truncate">
-                                            <strong>Jeffie Lewzey</strong>
+                                            <strong>{{item.real_name}}</strong>
                                             </div>
-                                            <div class="text-secondary">yesterday</div>
+                                            <div class="text-secondary">{{item.updata}}</div>
                                         </div>
                                         <div class="col-auto align-self-center">
                                             <div class="badge bg-primary"></div>
                                         </div>
                                     </div>
                                 </div>
+
                                 <div>
                                     <div class="row">
-                                    <div class="col-auto">
-                                        <span class="avatar" style="background-image: url(./static/avatars/002m.jpg)"></span>
-                                    </div>
-                                    <div class="col">
-                                        <div class="text-truncate">
-                                        <strong>Mallory Hulme</strong>
-                                        </div>
-                                        <div class="text-secondary">2 days ago</div>
-                                    </div>
-                                    <div class="col-auto align-self-center">
-                                        <div class="badge bg-primary"></div>
-                                    </div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="row">
-                                    <div class="col-auto">
-                                        <span class="avatar" style="background-image: url(./static/avatars/003m.jpg)"></span>
-                                    </div>
-                                    <div class="col">
-                                        <div class="text-truncate">
-                                        <strong>Dunn Slane</strong>
-                                        </div>
-                                        <div class="text-secondary">today</div>
-                                    </div>
-                                    <div class="col-auto align-self-center">
-                                        <div class="badge bg-primary"></div>
-                                    </div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="row">
-                                    <div class="col-auto">
-                                        <span class="avatar" style="background-image: url(./static/avatars/000f.jpg)"></span>
-                                    </div>
-                                    <div class="col">
-                                        <div class="text-truncate">
-                                        <strong>Emmy Levet</strong>
-                                        </div>
-                                        <div class="text-secondary">4 days ago</div>
-                                    </div>
+                                 
                            
                                     </div>
                                 </div>
 
-
-                                <div>
-                                    <div class="row">
-                            
-                                    </div>
-                                </div>
+                                
  
 
                                 </div>
@@ -135,41 +220,18 @@ export default{
                             <div class="card" style="height: 37rem">
                             <div class="card-body card-body-scrollable card-body-scrollable-shadow" style="padding: 8px;">
                                 <div class="divide-y">                         
-                                    <div class="row">
+                                    <div class="row" v-for="(item, key) in this.chat_history">
                                         <div class="col-auto">
                                             <span class="avatar">AA</span>
                                         </div>
                                         <div class="col">
                                             <div class="text-truncate">
-                                            Hello
+                                                {{item.msg}}
                                             </div>
-                                            <div class="text-secondary">2 days ago</div>
+                                            <div class="text-secondary">{{item.time}}</div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        
-                                        <div class="col">
-                                            <div class="text-truncate">
-                                            hi
-                                            </div>
-                                            <div class="text-secondary">2 days ago</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <span class="avatar">ME</span>
-                                        </div>
-                                    </div>    
-                                    <div class="row">
-                                        
-                                        <div class="col">
-                                            <div class="text-truncate">
-                                            hi he
-                                            </div>
-                                            <div class="text-secondary">2 days ago</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <span class="avatar">ME</span>
-                                        </div>
-                                    </div>                             
+                                                        
                                 </div>
                                 
 
