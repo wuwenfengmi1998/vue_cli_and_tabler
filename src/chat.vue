@@ -75,14 +75,70 @@ this.chat_history=[
     },
     {
         'id':'2',
-        'from_id':'1',
+        'from_id':'0',
         'to_id':'0',
         'msg':'abc',
         'time':'2023-09-11 19:42:54',
     },
     {
         'id':'3',
+        'from_id':'0',
+        'to_id':'0',
+        'msg':'qwe',
+        'time':'2023-09-11 19:42:54',
+    },
+    {
+        'id':'4',
         'from_id':'1',
+        'to_id':'0',
+        'msg':'abc',
+        'time':'2023-09-11 19:42:54',
+    },
+    {
+        'id':'5',
+        'from_id':'0',
+        'to_id':'0',
+        'msg':'qwe',
+        'time':'2023-09-11 19:42:54',
+    },
+    {
+        'id':'6',
+        'from_id':'1',
+        'to_id':'0',
+        'msg':'abc',
+        'time':'2023-09-11 19:42:54',
+    },
+    {
+        'id':'7',
+        'from_id':'0',
+        'to_id':'0',
+        'msg':'qwe',
+        'time':'2023-09-11 19:42:54',
+    },
+    {
+        'id':'8',
+        'from_id':'1',
+        'to_id':'0',
+        'msg':'abc',
+        'time':'2023-09-11 19:42:54',
+    },
+    {
+        'id':'9',
+        'from_id':'1',
+        'to_id':'0',
+        'msg':'qwe',
+        'time':'2023-09-11 19:42:54',
+    },
+    {
+        'id':'10',
+        'from_id':'1',
+        'to_id':'0',
+        'msg':'abc',
+        'time':'2023-09-11 19:42:54',
+    },
+    {
+        'id':'11',
+        'from_id':'0',
         'to_id':'0',
         'msg':'qwe',
         'time':'2023-09-11 19:42:54',
@@ -93,7 +149,7 @@ this.chat_history=[
 
     if(sessionStorage.getItem('sign_user')==null){
       //return to sign
-      this.$router.push('/sign');
+      //this.$router.push('/sign');
     }else{
         this.user=JSON.parse(sessionStorage.getItem('sign_user'));
         this.token=this.user['acc']['token'];
@@ -220,15 +276,29 @@ this.chat_history=[
                             <div class="card" style="height: 37rem">
                             <div class="card-body card-body-scrollable card-body-scrollable-shadow" style="padding: 8px;">
                                 <div class="divide-y">                         
-                                    <div class="row" v-for="(item, key) in this.chat_history">
-                                        <div class="col-auto">
-                                            <span class="avatar">AA</span>
-                                        </div>
-                                        <div class="col">
-                                            <div class="text-truncate">
-                                                {{item.msg}}
+                                    <div v-for="(item, key) in this.chat_history">
+                                        <div class="row" v-if="item.from_id==1">
+                                            
+                                            <div class="col">
+                                                <div class="text-truncate">
+                                                    {{item.msg}}
+                                                </div>
+                                                <div class="text-secondary">{{item.time}}</div>
                                             </div>
-                                            <div class="text-secondary">{{item.time}}</div>
+                                            <div class="col-auto">
+                                            <span class="avatar">AA</span>
+                                            </div>
+                                        </div>
+                                        <div class="row" v-else>
+                                            <div class="col-auto">
+                                            <span class="avatar">AA</span>
+                                            </div>
+                                            <div class="col">
+                                                <div class="text-truncate">
+                                                    {{item.msg}}
+                                                </div>
+                                                <div class="text-secondary">{{item.time}}</div>
+                                            </div>
                                         </div>
                                     </div>
                                                         

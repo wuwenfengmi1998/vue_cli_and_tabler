@@ -8,7 +8,7 @@
           <li class="list-inline-item"><a href="https://tabler.io/docs" target="_blank" class="link-secondary" rel="noopener">Documentation</a></li>      
           <li class="list-inline-item"><a href="https://github.com/tabler/tabler" target="_blank" class="link-secondary" rel="noopener">Source code</a></li>
           <li class="list-inline-item"><a href="./license.html" class="link-secondary">License</a></li>
-          <li class="list-inline-item"><router-link to="/config_account" class="link-secondary">Config</router-link></li>
+          <li class="list-inline-item"><router-link to="/chat" class="link-secondary">chat</router-link></li>
         </ul>
       </div>
       <div class="col-12 col-lg-auto mt-3 mt-lg-0">
